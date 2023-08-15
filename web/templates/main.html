@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+	<meta charset="utf-8">
+	<title>ClipCollector</title>
+	<link rel="stylesheet" type="text/css" href="web/node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="web/static/style.css">
+	<script src="web/static/video.js"></script>
+	<script src="web/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="web/node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
+</head>
+<body>
+	<main class="d-flex flex-nowrap">
+		<nav class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+			<a href="/" class="d-flex justify-content-center text-white text-decoration-none">
+				<span class="fs-4">ClipCollector</span>
+			</a>
+			<hr>
+			<div id="rtmp">
+				<h6>Catch Live</h6>
+				<button id="rtmp-switch" type="button" onclick="click_server_start()" class="btn btn-primary col-12">Server Start</button>
+				<div id="rtmp-status" class="collapse">
+					Ready For Streaming...
+				</div>
+			</div>
+			<hr>
+			<h6>Stream List</h6>
+			<ul id="stream-list" class="nav nav-pills flex-column mb-auto overflow-auto">
+				<li class="nav-item">
+					<span class="nav-link active">
+						Home
+					</span>
+				</li>
+				<li class="nav-item">
+					<span class="nav-link text-white">
+						Dashboard
+					</span>
+				</li>
+			</ul>
+			<hr>
+			<div class="dropdown" id="profile">
+				<ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+				  <li><button class="dropdown-item" onclick="get_config_data()" data-bs-toggle="modal" data-bs-target="#setting">Settings</button></li>
+				  <li><hr class="dropdown-divider"></li>
+				  <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+				</ul>
+				<a href="/" class="btn d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+				</a>
+			</div>
+		</nav>
+		<section id="video-section" class="d-flex flex-row flex-shrink-0 p-3 text-bg-dark">
+			<div class="video-container">
+				<video controls preload="auto" autoplay id="video" type="video/mp4"></video>
+			</div>
+			<div class="vr"></div>
+			<div class="clip-list list-group overflow-auto">
+				<h6>Clip List</h6>
+				<ul id="clip-list" class="nav nav-pills flex-column mb-auto overflow-auto">
+					<li class="nav-item">
+						<span class="nav-link active">
+							Home
+						</span>
+					</li>
+					<li class="nav-item">
+						<span class="nav-link text-white">
+							Dashboard
+						</span>
+					</li>
+				</ul>
+			</div>
+		</section>
+		<div class="modal fade" id="setting" tabindex="-1" role="dialog" aria-labelledby="setting">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<form id="form-config" action="javascript: submit_config()">
+				<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="settingLabel">Setting</h5>
+					<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="config-line">
+						<span>Data Path</span>
+						<input required name="data-path" type="text">
+					</div>
+					<p id="data-path-message" hidden></p>
+					<div class="config-line">
+						<span>ffmpeg Path</span>
+						<input required name="ffmpeg-path" type="text">
+					</div>
+					<p id="ffmpeg-path-message" hidden></p>
+					<hr>
+					<div class="config-line">
+						<span>Client ID</span>
+						<input required name="client-id" type="text">
+					</div>
+					<div class="config-line">
+						<span>Client Secret</span>
+						<input required name="client-secret" type="password" autocomplete="off">
+					</div>
+					<p id="client-info-message" hidden></p>
+					<hr>
+					<div class="config-line">
+						<span>RTMP Server Port</span>
+						<input required name="rtmp-server-port" type="number">
+					</div>
+					<div class="config-line">
+						<span>RTMP Server Autostart after Login</span>
+						<input name="rtmp-server-autostart" type="checkbox">
+					</div>
+					<hr>
+					<div class="config-line">
+						<span>Second Interval in Clip</span>
+						<input required name="start-time-interval" type="number">s
+						<span style="min-width: 20px;">~</span>
+						<input required name="end-time-interval" type="number">s
+					</div>
+					<p id="time-interval-message" hidden></p>
+				</div>
+				<div class="modal-footer">
+					<input type="reset" class="btn btn-secondary" data-bs-dismiss="modal" value="Close"/>
+					<input type="submit" class="btn btn-primary" value="Save Change"/>
+				</div>
+				</div>
+				</form>
+			</div>
+		</div>
+		<div class="modal fade" id="confirmErase" tabindex="-1" aria-labelledby="confirmErase" aria-hidden="true">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h1 class="modal-title fs-5" id="confirmEraseLabel">Confirm</h1>
+				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div id="confirmBody" class="modal-body">
+				  Erasing Current Stream...
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="erase">Erase</button>
+				</div>
+			  </div>
+			</div>
+		  </div>
+	</main>
+</body></html>
