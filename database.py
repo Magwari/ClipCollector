@@ -13,9 +13,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 CHUNK_SIZE = 1024*1024
 
+#check database & folder
+os.makedirs(os.path.join(configRouter.configparser.config['default']['data_path'], "video/"), exist_ok=True)
+os.makedirs(os.path.join(configRouter.configparser.config['default']['data_path'], "chatLog/"), exist_ok=True)
 connect = sqlite3.connect(os.path.join(configRouter.configparser.config['default']['data_path'], 'stream.db'))
 
-#check database
 check_cursor = connect.cursor()
 check_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
 table_list = [row[0] for row in check_cursor.fetchall()]
